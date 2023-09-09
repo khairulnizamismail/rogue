@@ -1,0 +1,9 @@
+1. Sendmail
+
+/etc/postfix/main.cf
+/etc/postfix/sasl/sasl_passwd
+/etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
+
+2. Crontab
+
+/var/spool/cron/crontabs/root

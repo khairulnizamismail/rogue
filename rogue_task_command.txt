@@ -1,0 +1,63 @@
+===CREATE SCRIPT===
+
+#create rough script
+nano /home/nizam/rogue/rogue.sh
+nano /home/nizam/rogue/rogue.sh
+chmod 777 /home/nizam/rogue/rogue.sh
+chown root:root:/home/nizam/rogue/rogue.sh
+
+
+
+==INSTALL AND CONFIGURE SENDMAIL===
+
+#Install postfix email
+apt-get install postfix
+
+#check main config
+cat /etc/postfix/main.cf
+
+#Create a Gmail App Password
+Google account -> Secrity -> 2 step verification ->  App Password
+#app passowrd
+sjrf ffqs hqtr rxnx
+
+#Configure SASL with Your Gmail Credentials
+touch /etc/postfix/sasl/sasl_passwd
+nano /etc/postfix/sasl/sasl_passwd
+
+[smtp.gmail.com]:587 khairulnizam01@gmail.com:sjrfffqshqtrrxnx
+
+#crete db
+postmap /etc/postfix/sasl/sasl_passwd
+
+#change ownership
+chown root:root /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
+chmod 0600 /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
+
+#set the relay value
+
+nano /etc/postfix/main.cf
+
+relayhost = [smtp.gmail.com]:587
+
+# Enable SASL authentication-add end of line
+smtp_sasl_auth_enable = yes
+smtp_sasl_security_options = noanonymous
+smtp_sasl_password_maps = hash:/etc/postfix/sasl/sasl_passwd
+smtp_tls_security_level = encrypt
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+
+#restart service
+systemctl restart postfix
+
+#test email
+sendmail khairuln.ismail@gmail.com
+subject: test email #1
+this is test email
+
+
+==ADD STARTUP SCRIPT==
+
+#Run script when startup
+crontab -e
+@reboot sudo /home/nizam/rogue/rogue.sh &
